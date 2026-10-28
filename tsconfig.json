@@ -9,5 +9,5 @@
     "allowImportingTsExtensions": true,
     "types": ["node"]
   },
-  "include": ["server", "test"]
+  "include": ["server", "test", "playwright.config.ts"]
 }

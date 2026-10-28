@@ -31,7 +31,8 @@ async function handle(request: IncomingMessage, response: ServerResponse) {
     await handleApi(request, response, url);
     return;
   }
-  if (pathname === "/") {
+  // Both pages get the same HTML; the frontend renders the one for the path.
+  if (pathname === "/" || /^\/tasks\/[^/]+$/.test(pathname)) {
     response.writeHead(200, { "content-type": "text/html; charset=utf-8" });
     response.end(PAGE);
     return;

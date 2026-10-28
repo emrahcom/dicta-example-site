@@ -1,5 +1,14 @@
-// The Teamboard frontend.
+// The Teamboard frontend: renders the page that fits the path.
 
-const title = document.createElement("h1");
-title.textContent = "Teamboard";
-document.body.append(title);
+import { renderListPage } from "./list-page.ts";
+import { renderTaskPage } from "./task-page.ts";
+
+const root = document.createElement("main");
+document.body.append(root);
+
+const match = /^\/tasks\/([^/]+)$/.exec(location.pathname);
+if (match?.[1]) {
+  await renderTaskPage(root, decodeURIComponent(match[1]));
+} else {
+  await renderListPage(root);
+}
