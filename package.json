@@ -1,0 +1,26 @@
+{
+  "name": "dicta-example-site",
+  "version": "0.0.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "npm run build && node server/index.ts",
+    "build": "tsc -p tsconfig.web.json",
+    "check": "prettier --check . && tsc && tsc -p tsconfig.web.json --noEmit",
+    "format": "prettier --write .",
+    "lint": "oxlint --type-aware --deny-warnings",
+    "lint:fix": "oxlint --type-aware --fix",
+    "test": "node --test --test-timeout=5000 \"test/**/*.test.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "oxlint": "^1.90.0",
+    "oxlint-tsgolint": "^7.0.2005",
+    "prettier": "^3.9.10",
+    "typescript": "^7.0.2"
+  }
+}
