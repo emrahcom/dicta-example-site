@@ -1,4 +1,5 @@
-// The Teamboard web server: the page and the compiled frontend in dist/.
+// The Teamboard web server: the API, the page and the compiled frontend in
+// dist/.
 
 import { readFile } from "node:fs/promises";
 import {
@@ -7,6 +8,7 @@ import {
   type Server,
   type ServerResponse,
 } from "node:http";
+import { handleApi } from "./api.ts";
 
 const DIST = new URL("../dist/", import.meta.url);
 
@@ -23,7 +25,12 @@ const PAGE = `<!doctype html>
 `;
 
 async function handle(request: IncomingMessage, response: ServerResponse) {
-  const { pathname } = new URL(request.url ?? "/", "http://localhost");
+  const url = new URL(request.url ?? "/", "http://localhost");
+  const { pathname } = url;
+  if (pathname.startsWith("/api/")) {
+    await handleApi(request, response, url);
+    return;
+  }
   if (pathname === "/") {
     response.writeHead(200, { "content-type": "text/html; charset=utf-8" });
     response.end(PAGE);
