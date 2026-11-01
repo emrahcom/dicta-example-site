@@ -15,6 +15,22 @@ export function el<K extends keyof HTMLElementTagNameMap>(
 export const errorLine = el("p", { className: "error" });
 errorLine.setAttribute("role", "alert");
 
+// A visible label for a form field; the field's id is its name.
+export function label(
+  text: string,
+  field: HTMLInputElement | HTMLSelectElement,
+) {
+  field.id = field.name;
+  return el("label", { htmlFor: field.id, textContent: text });
+}
+
+// A line whose new text is announced, such as "Saved".
+export function statusLine(className: string) {
+  const line = el("p", { className });
+  line.setAttribute("role", "status");
+  return line;
+}
+
 export function showError(err: unknown) {
   errorLine.textContent = err instanceof Error ? err.message : String(err);
 }

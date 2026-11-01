@@ -2,7 +2,7 @@
 
 import * as actions from "./actions.ts";
 import { listTasks, listTeammates, type Teammate } from "./api.ts";
-import { el, errorLine, run, teammateOptions } from "./ui.ts";
+import { el, errorLine, label, run, teammateOptions } from "./ui.ts";
 
 export async function renderListPage(root: HTMLElement) {
   const teammates = await listTeammates();
@@ -54,21 +54,21 @@ export async function renderListPage(root: HTMLElement) {
     );
   }
 
-  const title = el("input", { name: "title", placeholder: "New task" });
-  title.setAttribute("aria-label", "Title");
+  const title = el("input", { name: "title" });
   const due = el("input", { name: "due", type: "date" });
-  due.setAttribute("aria-label", "Due date");
   const assignee = el(
     "select",
     { name: "assignee" },
     ...teammateOptions(teammates, null, "Nobody"),
   );
-  assignee.setAttribute("aria-label", "Assignee");
   const form = el(
     "form",
     { className: "add" },
+    label("Title", title),
     title,
+    label("Due date", due),
     due,
+    label("Assignee", assignee),
     assignee,
     el("button", { type: "submit", textContent: "Add task" }),
   );
@@ -85,6 +85,7 @@ export async function renderListPage(root: HTMLElement) {
     });
   });
 
+  document.title = "Teamboard";
   root.replaceChildren(
     el("h1", { textContent: "Teamboard" }),
     form,

@@ -2,7 +2,14 @@
 
 import * as actions from "./actions.ts";
 import { getTask, listTeammates } from "./api.ts";
-import { el, errorLine, run, teammateOptions } from "./ui.ts";
+import {
+  el,
+  errorLine,
+  label,
+  run,
+  statusLine,
+  teammateOptions,
+} from "./ui.ts";
 
 export async function renderTaskPage(root: HTMLElement, id: string) {
   const back = el("a", { href: "/", textContent: "All tasks" });
@@ -10,27 +17,28 @@ export async function renderTaskPage(root: HTMLElement, id: string) {
   try {
     task = await getTask(id);
   } catch {
+    document.title = "No such task - Teamboard";
     root.replaceChildren(back, el("h1", { textContent: "No such task" }));
     return;
   }
   const teammates = await listTeammates();
 
   const title = el("input", { name: "title", value: task.title });
-  title.setAttribute("aria-label", "Title");
   const due = el("input", { name: "due", type: "date", value: task.due ?? "" });
-  due.setAttribute("aria-label", "Due date");
   const assignee = el(
     "select",
     { name: "assignee" },
     ...teammateOptions(teammates, task.assignee, "Nobody"),
   );
-  assignee.setAttribute("aria-label", "Assignee");
-  const saved = el("p", { className: "saved" });
+  const saved = statusLine("saved");
   const edit = el(
     "form",
     { className: "edit" },
+    label("Title", title),
     title,
+    label("Due date", due),
     due,
+    label("Assignee", assignee),
     assignee,
     el("button", { type: "submit", textContent: "Save" }),
   );
@@ -52,11 +60,11 @@ export async function renderTaskPage(root: HTMLElement, id: string) {
     { name: "teammate" },
     ...teammateOptions(teammates, null, "Choose a teammate"),
   );
-  teammate.setAttribute("aria-label", "Teammate");
-  const shared = el("p", { className: "shared" });
+  const shared = statusLine("shared");
   const share = el(
     "form",
     { className: "share" },
+    label("Teammate", teammate),
     teammate,
     el("button", { type: "submit", textContent: "Share" }),
   );
@@ -69,6 +77,7 @@ export async function renderTaskPage(root: HTMLElement, id: string) {
     });
   });
 
+  document.title = `${task.title} - Teamboard`;
   root.replaceChildren(
     back,
     el("h1", { textContent: task.title }),
