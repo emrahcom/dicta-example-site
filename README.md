@@ -3,8 +3,9 @@
 Teamboard, a small task list for a team. It is an example site for dicta
 actions.
 
-To see what dicta-action-harness makes for a site, look at this site's folder in
-the harness:
+To see what
+[dicta-action-harness](https://github.com/emrahcom/dicta-action-harness) makes
+for a site, look at this site's folder in the harness:
 https://github.com/emrahcom/dicta-action-harness/tree/main/sites/example-site
 
 The site does not use dicta itself. Its action layer is made with the harness,
